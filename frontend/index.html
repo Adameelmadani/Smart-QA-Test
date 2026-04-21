@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ReqTracer, AI-powered Requirements Engineering & Test Plan Generation Platform. Extract requirements, ask questions with citations, and generate traceable test plans.">
+    <title>ReqTracer, AI Requirements & Test Platform</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23FF6B35'/><text x='16' y='22' font-size='18' fill='white' text-anchor='middle' font-weight='bold'>R</text></svg>">
+</head>
+<body>
+
+<!-- ═══ Navbar ═══ -->
+<nav class="navbar" id="navbar">
+    <a href="#" class="navbar-brand" onclick="showSection('upload')">
+        <div class="navbar-logo">R</div>
+        <div class="navbar-title">Req<span>Tracer</span></div>
+    </a>
+    <ul class="navbar-nav" id="navLinks">
+        <li><a href="#" class="active" data-section="upload" onclick="showSection('upload')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+            Upload</a></li>
+        <li><a href="#" data-section="requirements" onclick="showSection('requirements')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            Requirements</a></li>
+        <li><a href="#" data-section="qa" onclick="showSection('qa')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            Q/A</a></li>
+        <li><a href="#" data-section="tests" onclick="showSection('tests')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+            Tests</a></li>
+        <li><a href="#" data-section="export" onclick="showSection('export')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            Export</a></li>
+    </ul>
+    <div class="navbar-stats" id="navStats">
+        <div class="stat-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+            Docs: <span class="stat-value" id="statDocs">0</span>
+        </div>
+        <div class="stat-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/></svg>
+            Reqs: <span class="stat-value" id="statReqs">0</span>
+        </div>
+        <div class="stat-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>
+            Tests: <span class="stat-value" id="statTests">0</span>
+        </div>
+    </div>
+</nav>
+
+<!-- ═══ Loading Overlay ═══ -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text" id="loadingText">Processing...</div>
+</div>
+
+<!-- ═══ Toast Container ═══ -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ═══ Main Content ═══ -->
+<main class="main-content">
+
+    <!-- ──── Upload Section ──── -->
+    <div class="section-panel active" id="section-upload">
+        <div class="hero">
+            <h1>AI-Powered <span>Requirements</span><br>Engineering Platform</h1>
+            <p>Upload your specifications, extract requirements, ask questions with citations, and generate traceable test plans, all in one place.</p>
+            <div class="hero-features">
+                <div class="hero-feature">
+                    <div class="feature-icon upload">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                    </div>
+                    <span class="feature-text">PDF / DOCX Import</span>
+                </div>
+                <div class="hero-feature">
+                    <div class="feature-icon rag">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    </div>
+                    <span class="feature-text">RAG Q/A with Citations</span>
+                </div>
+                <div class="hero-feature">
+                    <div class="feature-icon test">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                    </div>
+                    <span class="feature-text">Test Case Generation</span>
+                </div>
+                <div class="hero-feature">
+                    <div class="feature-icon export">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                    </div>
+                    <span class="feature-text">Excel / JSON Export</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">
+                        <div class="icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                        </div>
+                        Upload Specification
+                    </div>
+                    <div class="card-subtitle">Upload a PDF or DOCX specification document to begin analysis</div>
+                </div>
+            </div>
+            <div class="upload-zone" id="uploadZone">
+                <div class="upload-icon">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                </div>
+                <h3>Drop your file here, or click to browse</h3>
+                <p>Supports PDF and DOCX files (including tables)</p>
+                <input type="file" id="fileInput" accept=".pdf,.docx,.doc">
+            </div>
+            <div class="progress-bar hidden" id="uploadProgress">
+                <div class="progress-fill" id="uploadProgressFill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">
+                        <div class="icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                        </div>
+                        Sample Domain Packs
+                    </div>
+                    <div class="card-subtitle">Quick-start with pre-built specification documents</div>
+                </div>
+            </div>
+            <div class="domain-packs" id="domainPacks">
+                <div class="domain-pack-card" onclick="loadDomainPack('automotive_avas.docx')">
+                    <div class="pack-icon auto">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1565C0" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                    </div>
+                    <div class="pack-info">
+                        <h4>Automotive, AVAS</h4>
+                        <p>Acoustic Vehicle Alerting System specification (17 requirements)</p>
+                    </div>
+                </div>
+                <div class="domain-pack-card" onclick="loadDomainPack('energy_smartgrid.docx')">
+                    <div class="pack-icon energy">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F57F17" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    </div>
+                    <div class="pack-info">
+                        <h4>Energy, Smart Grid</h4>
+                        <p>Smart Grid Monitoring System (14 requirements)</p>
+                    </div>
+                </div>
+                <div class="domain-pack-card" onclick="loadDomainPack('railway_signaling.docx')">
+                    <div class="pack-icon rail">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7B1FA2" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                    </div>
+                    <div class="pack-info">
+                        <h4>Railway, Signaling</h4>
+                        <p>Railway Signaling Control System (16 requirements)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="documentsCard" style="display:none">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">
+                        <div class="icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+                        </div>
+                        Uploaded Documents
+                    </div>
+                </div>
+            </div>
+            <div class="doc-list" id="docList"></div>
+        </div>
+    </div>
+
+    <!-- ──── Requirements Section ──── -->
+    <div class="section-panel" id="section-requirements">
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">
+                        <div class="icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                        </div>
+                        Extracted Requirements
+                    </div>
+                    <div class="card-subtitle">Requirements automatically extracted and classified from your documents</div>
+                </div>
+                <div class="flex gap-2">
+                    <select id="reqDocSelect" class="qa-input" style="width:auto;padding:8px 12px;font-size:13px" onchange="loadRequirements(this.value)">
+                        <option value="">Select document...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-bar" id="reqFilterBar" style="display:none">
+                <span class="text-sm text-muted">Filter:</span>
+                <div class="filter-group" id="typeFilters">
+                    <span class="filter-chip active" data-filter="all" onclick="filterReqs('type', 'all')">All</span>
+                    <span class="filter-chip" data-filter="functional" onclick="filterReqs('type', 'functional')">Functional</span>
+                    <span class="filter-chip" data-filter="performance" onclick="filterReqs('type', 'performance')">Performance</span>
+                    <span class="filter-chip" data-filter="interface" onclick="filterReqs('type', 'interface')">Interface</span>
+                    <span class="filter-chip" data-filter="security" onclick="filterReqs('type', 'security')">Security</span>
+                </div>
+                <span class="text-sm text-muted" style="margin-left:8px">Priority:</span>
+                <div class="filter-group" id="priorityFilters">
+                    <span class="filter-chip active" data-filter="all" onclick="filterReqs('priority', 'all')">All</span>
+                    <span class="filter-chip" data-filter="high" onclick="filterReqs('priority', 'high')">High</span>
+                    <span class="filter-chip" data-filter="medium" onclick="filterReqs('priority', 'medium')">Medium</span>
+                    <span class="filter-chip" data-filter="low" onclick="filterReqs('priority', 'low')">Low</span>
+                </div>
+            </div>
+
+            <div id="reqTableContainer">
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/></svg>
+                    </div>
+                    <h3>No Requirements Yet</h3>
+                    <p>Upload a document first, then requirements will be extracted automatically.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ──── Q/A Section ──── -->
+    <div class="section-panel" id="section-qa">
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">
+                        <div class="icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        </div>
+                        Ask Questions (RAG)
+                    </div>
+                    <div class="card-subtitle">Ask questions about your documents and get answers with source citations</div>
+                </div>
+            </div>
+            <div class="qa-container">
+                <div class="qa-input-group">
+                    <input type="text" class="qa-input" id="qaInput" placeholder="e.g. What are the sound level requirements for AVAS?" onkeydown="if(event.key==='Enter')askQuestion()">
+                    <button class="btn btn-primary" onclick="askQuestion()" id="qaBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        Ask
+                    </button>
+                </div>
+                <div class="qa-messages" id="qaMessages">
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                        </div>
+                        <h3>Ask a Question</h3>
+                        <p>Upload a document first, then ask questions to get answers with citations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ──── Tests Section ──── -->
+    <div class="section-panel" id="section-tests">
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">
+                        <div class="icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                        </div>
+                        Test Cases
+                    </div>
+                    <div class="card-subtitle">Auto-generated structured test cases with traceability</div>
+                </div>
+                <div class="flex gap-2">
+                    <select id="testDocSelect" class="qa-input" style="width:auto;padding:8px 12px;font-size:13px" onchange="loadTests(this.value)">
+                        <option value="">Select document...</option>
+                    </select>
+                    <button class="btn btn-primary btn-sm" onclick="generateTests()" id="genTestsBtn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        Generate
+                    </button>
+                </div>
+            </div>
+
+            <div id="testCasesContainer">
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/></svg>
+                    </div>
+                    <h3>No Test Cases Yet</h3>
+                    <p>Select a document and click "Generate" to create test cases from requirements.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" id="traceCard" style="display:none">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">
+                        <div class="icon" style="background: linear-gradient(135deg, #4CAF50, #66BB6A);">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg>
+                        </div>
+                        Traceability Matrix
+                    </div>
+                    <div class="card-subtitle">Requirement ↔ Test Case mapping</div>
+                </div>
+            </div>
+            <div class="trace-grid" id="traceGrid"></div>
+        </div>
+    </div>
+
+    <!-- ──── Export Section ──── -->
+    <div class="section-panel" id="section-export">
+        <div class="card">
+            <div class="card-header">
+                <div>
+                    <div class="card-title">
+                        <div class="icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                        </div>
+                        Export Test Plan
+                    </div>
+                    <div class="card-subtitle">Download your test plan with full traceability</div>
+                </div>
+                <select id="exportDocSelect" class="qa-input" style="width:auto;padding:8px 12px;font-size:13px">
+                    <option value="">Select document...</option>
+                </select>
+            </div>
+
+            <div class="export-options">
+                <div class="export-card" onclick="exportData('excel')">
+                    <div class="export-icon excel">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
+                    </div>
+                    <h3>Excel Export</h3>
+                    <p>Download .xlsx with Requirements, Tests, and Traceability sheets</p>
+                </div>
+                <div class="export-card" onclick="exportData('json')">
+                    <div class="export-icon json-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    </div>
+                    <h3>JSON Export</h3>
+                    <p>Download structured JSON for integration with other tools</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  reqtracer:
+    build: .
+    container_name: reqtracer
+    ports:
+      - "8000:8000"
+    volumes:
+      - uploads_data:/app/backend/uploads
+      - exports_data:/app/backend/exports
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+
+volumes:
+  uploads_data:
+  exports_data:
