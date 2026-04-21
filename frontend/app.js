@@ -50,6 +50,23 @@ function showSection(section) {
     if (section === 'requirements') updateDocSelects();
     if (section === 'tests') updateDocSelects();
     if (section === 'export') updateDocSelects();
+
+    // Close mobile menu if open
+    const navLinks = document.getElementById('navLinks');
+    const hamburger = document.getElementById('hamburger');
+    if (navLinks && navLinks.classList.contains('show-menu')) {
+        navLinks.classList.remove('show-menu');
+        hamburger.classList.remove('active');
+    }
+}
+
+function toggleMobileMenu() {
+    const navLinks = document.getElementById('navLinks');
+    const hamburger = document.getElementById('hamburger');
+    if (navLinks && hamburger) {
+        navLinks.classList.toggle('show-menu');
+        hamburger.classList.toggle('active');
+    }
 }
 
 function initNavbar() {
