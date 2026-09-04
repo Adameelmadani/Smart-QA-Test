@@ -121,9 +121,3 @@ Projet/
 - Test generation is template-based, not AI-generated
 - In-memory storage (data resets on server restart)
 - Embedding model downloads on first run (~90 MB)
-
----
-
-## License
-
-MIT
